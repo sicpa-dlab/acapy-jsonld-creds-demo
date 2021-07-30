@@ -1110,7 +1110,7 @@ paths:
                 $ref: '#/components/schemas/V20IssueCredentialModuleResponse'
   /issue-credential-2.0/records/{cred_ex_id}/issue:
     post:
-      opreationId: issue_credential_from_exchange
+      operationId: issue_credential_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send holder a credential
@@ -1138,7 +1138,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/records/{cred_ex_id}/problem-report:
     post:
-      opreationId: report_problem
+      operationId: report_problem
       tags:
       - issue-credential v2.0
       summary: Send a problem report for credential exchange
@@ -1166,7 +1166,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/records/{cred_ex_id}/send-offer:
     post:
-      opreationId: send_offer_from_exchange
+      operationId: send_offer_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send holder a credential offer in reference to a proposal with preview
@@ -1187,7 +1187,7 @@ paths:
                 $ref: '#/components/schemas/V20CredExRecord'
   /issue-credential-2.0/records/{cred_ex_id}/send-request:
     post:
-      opreationId: send_request_from_exchange
+      operationId: send_request_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send issuer a credential request
@@ -1208,7 +1208,7 @@ paths:
                 $ref: '#/components/schemas/V20CredExRecord'
   /issue-credential-2.0/records/{cred_ex_id}/store:
     post:
-      opreationId: store_credential_from_exchange
+      operationId: store_credential_from_exchange
       tags:
       - issue-credential v2.0
       summary: Store a received credential
@@ -1236,7 +1236,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send:
     post:
-      opreationId: send_credential
+      operationId: send_credential
       tags:
       - issue-credential v2.0
       summary: Send holder a credential, automating entire flow
@@ -1256,7 +1256,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send-offer:
     post:
-      opreationId: send_offer
+      operationId: send_offer
       tags:
       - issue-credential v2.0
       summary: Send holder a credential offer, independent of any proposal
@@ -1276,7 +1276,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send-proposal:
     post:
-      opreationId: send_proposal
+      operationId: send_proposal
       tags:
       - issue-credential v2.0
       summary: Send issuer a credential proposal
