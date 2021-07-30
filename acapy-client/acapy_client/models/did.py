@@ -44,9 +44,11 @@ class DID:
 
         verkey = d.pop("verkey")
 
-        posture: Union[Unset, DIDPosture] = UNSET
         _posture = d.pop("posture", UNSET)
-        if not isinstance(_posture, Unset):
+        posture: Union[Unset, DIDPosture]
+        if isinstance(_posture, Unset):
+            posture = UNSET
+        else:
             posture = DIDPosture(_posture)
 
         did = cls(

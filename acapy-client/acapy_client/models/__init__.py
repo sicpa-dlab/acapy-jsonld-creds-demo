@@ -59,8 +59,6 @@ from .did_result import DIDResult
 from .endpoints_result import EndpointsResult
 from .get_connections_state import GetConnectionsState
 from .get_connections_their_role import GetConnectionsTheirRole
-from .get_issue_credential_20_records_role import GetIssueCredential20RecordsRole
-from .get_issue_credential_20_records_state import GetIssueCredential20RecordsState
 from .get_issue_credential_records_role import GetIssueCredentialRecordsRole
 from .get_issue_credential_records_state import GetIssueCredentialRecordsState
 from .get_ledger_did_endpoint_endpoint_type import GetLedgerDidEndpointEndpointType
@@ -68,6 +66,8 @@ from .get_mediation_keylists_role import GetMediationKeylistsRole
 from .get_mediation_requests_state import GetMediationRequestsState
 from .get_present_proof_records_role import GetPresentProofRecordsRole
 from .get_present_proof_records_state import GetPresentProofRecordsState
+from .get_records_role import GetRecordsRole
+from .get_records_state import GetRecordsState
 from .get_revocation_registries_created_state import GetRevocationRegistriesCreatedState
 from .get_wallet_did_posture import GetWalletDidPosture
 from .holder_module_response import HolderModuleResponse

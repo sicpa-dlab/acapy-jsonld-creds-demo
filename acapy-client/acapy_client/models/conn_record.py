@@ -26,7 +26,7 @@ class ConnRecord:
     invitation_msg_id: Union[Unset, str] = UNSET
     my_did: Union[Unset, str] = UNSET
     request_id: Union[Unset, str] = UNSET
-    rfc_23_state: Union[Unset, str] = UNSET
+    rfc23_state: Union[Unset, str] = UNSET
     routing_state: Union[Unset, ConnRecordRoutingState] = UNSET
     state: Union[Unset, str] = UNSET
     their_did: Union[Unset, str] = UNSET
@@ -54,7 +54,7 @@ class ConnRecord:
         invitation_msg_id = self.invitation_msg_id
         my_did = self.my_did
         request_id = self.request_id
-        rfc_23_state = self.rfc_23_state
+        rfc23_state = self.rfc23_state
         routing_state: Union[Unset, str] = UNSET
         if not isinstance(self.routing_state, Unset):
             routing_state = self.routing_state.value
@@ -94,8 +94,8 @@ class ConnRecord:
             field_dict["my_did"] = my_did
         if request_id is not UNSET:
             field_dict["request_id"] = request_id
-        if rfc_23_state is not UNSET:
-            field_dict["rfc23_state"] = rfc_23_state
+        if rfc23_state is not UNSET:
+            field_dict["rfc23_state"] = rfc23_state
         if routing_state is not UNSET:
             field_dict["routing_state"] = routing_state
         if state is not UNSET:
@@ -116,9 +116,11 @@ class ConnRecord:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        accept: Union[Unset, ConnRecordAccept] = UNSET
         _accept = d.pop("accept", UNSET)
-        if not isinstance(_accept, Unset):
+        accept: Union[Unset, ConnRecordAccept]
+        if isinstance(_accept, Unset):
+            accept = UNSET
+        else:
             accept = ConnRecordAccept(_accept)
 
         alias = d.pop("alias", UNSET)
@@ -133,9 +135,11 @@ class ConnRecord:
 
         invitation_key = d.pop("invitation_key", UNSET)
 
-        invitation_mode: Union[Unset, ConnRecordInvitationMode] = UNSET
         _invitation_mode = d.pop("invitation_mode", UNSET)
-        if not isinstance(_invitation_mode, Unset):
+        invitation_mode: Union[Unset, ConnRecordInvitationMode]
+        if isinstance(_invitation_mode, Unset):
+            invitation_mode = UNSET
+        else:
             invitation_mode = ConnRecordInvitationMode(_invitation_mode)
 
         invitation_msg_id = d.pop("invitation_msg_id", UNSET)
@@ -144,11 +148,13 @@ class ConnRecord:
 
         request_id = d.pop("request_id", UNSET)
 
-        rfc_23_state = d.pop("rfc23_state", UNSET)
+        rfc23_state = d.pop("rfc23_state", UNSET)
 
-        routing_state: Union[Unset, ConnRecordRoutingState] = UNSET
         _routing_state = d.pop("routing_state", UNSET)
-        if not isinstance(_routing_state, Unset):
+        routing_state: Union[Unset, ConnRecordRoutingState]
+        if isinstance(_routing_state, Unset):
+            routing_state = UNSET
+        else:
             routing_state = ConnRecordRoutingState(_routing_state)
 
         state = d.pop("state", UNSET)
@@ -159,9 +165,11 @@ class ConnRecord:
 
         their_public_did = d.pop("their_public_did", UNSET)
 
-        their_role: Union[Unset, ConnRecordTheirRole] = UNSET
         _their_role = d.pop("their_role", UNSET)
-        if not isinstance(_their_role, Unset):
+        their_role: Union[Unset, ConnRecordTheirRole]
+        if isinstance(_their_role, Unset):
+            their_role = UNSET
+        else:
             their_role = ConnRecordTheirRole(_their_role)
 
         updated_at = d.pop("updated_at", UNSET)
@@ -178,7 +186,7 @@ class ConnRecord:
             invitation_msg_id=invitation_msg_id,
             my_did=my_did,
             request_id=request_id,
-            rfc_23_state=rfc_23_state,
+            rfc23_state=rfc23_state,
             routing_state=routing_state,
             state=state,
             their_did=their_did,

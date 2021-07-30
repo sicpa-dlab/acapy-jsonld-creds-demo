@@ -3,8 +3,8 @@ from typing import Any, Dict, Union
 import httpx
 
 from ...client import Client
-from ...models.get_issue_credential_20_records_role import GetIssueCredential20RecordsRole
-from ...models.get_issue_credential_20_records_state import GetIssueCredential20RecordsState
+from ...models.get_records_role import GetRecordsRole
+from ...models.get_records_state import GetRecordsState
 from ...types import UNSET, Response, Unset
 
 
@@ -12,8 +12,8 @@ def _get_kwargs(
     *,
     client: Client,
     connection_id: Union[Unset, str] = UNSET,
-    role: Union[Unset, GetIssueCredential20RecordsRole] = UNSET,
-    state: Union[Unset, GetIssueCredential20RecordsState] = UNSET,
+    role: Union[Unset, GetRecordsRole] = UNSET,
+    state: Union[Unset, GetRecordsState] = UNSET,
     thread_id: Union[Unset, str] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/issue-credential-2.0/records".format(client.base_url)
@@ -46,7 +46,7 @@ def _get_kwargs(
     }
 
 
-def _build_response(*, response: httpx.Response) -> Response[None]:
+def _build_response(*, response: httpx.Response) -> Response[Any]:
     return Response(
         status_code=response.status_code,
         content=response.content,
@@ -59,10 +59,10 @@ def sync_detailed(
     *,
     client: Client,
     connection_id: Union[Unset, str] = UNSET,
-    role: Union[Unset, GetIssueCredential20RecordsRole] = UNSET,
-    state: Union[Unset, GetIssueCredential20RecordsState] = UNSET,
+    role: Union[Unset, GetRecordsRole] = UNSET,
+    state: Union[Unset, GetRecordsState] = UNSET,
     thread_id: Union[Unset, str] = UNSET,
-) -> Response[None]:
+) -> Response[Any]:
     kwargs = _get_kwargs(
         client=client,
         connection_id=connection_id,
@@ -82,10 +82,10 @@ async def asyncio_detailed(
     *,
     client: Client,
     connection_id: Union[Unset, str] = UNSET,
-    role: Union[Unset, GetIssueCredential20RecordsRole] = UNSET,
-    state: Union[Unset, GetIssueCredential20RecordsState] = UNSET,
+    role: Union[Unset, GetRecordsRole] = UNSET,
+    state: Union[Unset, GetRecordsState] = UNSET,
     thread_id: Union[Unset, str] = UNSET,
-) -> Response[None]:
+) -> Response[Any]:
     kwargs = _get_kwargs(
         client=client,
         connection_id=connection_id,

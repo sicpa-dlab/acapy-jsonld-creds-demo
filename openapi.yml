@@ -1000,6 +1000,7 @@ paths:
                 $ref: '#/components/schemas/QueryResult'
   /issue-credential-2.0/create:
     post:
+      operationId: create_credential
       tags:
       - issue-credential v2.0
       summary: Send holder a credential, automating entire flow
@@ -1019,6 +1020,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/records:
     get:
+      operationId: get_records
       tags:
       - issue-credential v2.0
       summary: Fetch all credential exchange records
@@ -1067,6 +1069,7 @@ paths:
                 $ref: '#/components/schemas/V20CredExRecordListResult'
   /issue-credential-2.0/records/{cred_ex_id}:
     get:
+      operationId: get_record
       tags:
       - issue-credential v2.0
       summary: Fetch a single credential exchange record
@@ -1086,6 +1089,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/V20CredExRecordDetail'
     delete:
+      operationId: delete_record
       tags:
       - issue-credential v2.0
       summary: Remove an existing credential exchange record
@@ -1106,6 +1110,7 @@ paths:
                 $ref: '#/components/schemas/V20IssueCredentialModuleResponse'
   /issue-credential-2.0/records/{cred_ex_id}/issue:
     post:
+      opreationId: issue_credential_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send holder a credential
@@ -1133,6 +1138,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/records/{cred_ex_id}/problem-report:
     post:
+      opreationId: report_problem
       tags:
       - issue-credential v2.0
       summary: Send a problem report for credential exchange
@@ -1160,6 +1166,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/records/{cred_ex_id}/send-offer:
     post:
+      opreationId: send_offer_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send holder a credential offer in reference to a proposal with preview
@@ -1180,6 +1187,7 @@ paths:
                 $ref: '#/components/schemas/V20CredExRecord'
   /issue-credential-2.0/records/{cred_ex_id}/send-request:
     post:
+      opreationId: send_request_from_exchange
       tags:
       - issue-credential v2.0
       summary: Send issuer a credential request
@@ -1200,6 +1208,7 @@ paths:
                 $ref: '#/components/schemas/V20CredExRecord'
   /issue-credential-2.0/records/{cred_ex_id}/store:
     post:
+      opreationId: store_credential_from_exchange
       tags:
       - issue-credential v2.0
       summary: Store a received credential
@@ -1227,6 +1236,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send:
     post:
+      opreationId: send_credential
       tags:
       - issue-credential v2.0
       summary: Send holder a credential, automating entire flow
@@ -1246,6 +1256,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send-offer:
     post:
+      opreationId: send_offer
       tags:
       - issue-credential v2.0
       summary: Send holder a credential offer, independent of any proposal
@@ -1265,6 +1276,7 @@ paths:
       x-codegen-request-body-name: body
   /issue-credential-2.0/send-proposal:
     post:
+      opreationId: send_proposal
       tags:
       - issue-credential v2.0
       summary: Send issuer a credential proposal
