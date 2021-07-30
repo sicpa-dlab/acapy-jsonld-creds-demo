@@ -1,8 +1,9 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ...client import Client
+from ...models.keylist_query import KeylistQuery
 from ...models.keylist_query_filter_request import KeylistQueryFilterRequest
 from ...types import UNSET, Response, Unset
 
@@ -38,12 +39,20 @@ def _get_kwargs(
     }
 
 
-def _build_response(*, response: httpx.Response) -> Response[Any]:
+def _parse_response(*, response: httpx.Response) -> Optional[KeylistQuery]:
+    if response.status_code == 201:
+        response_201 = KeylistQuery.from_dict(response.json())
+
+        return response_201
+    return None
+
+
+def _build_response(*, response: httpx.Response) -> Response[KeylistQuery]:
     return Response(
         status_code=response.status_code,
         content=response.content,
         headers=response.headers,
-        parsed=None,
+        parsed=_parse_response(response=response),
     )
 
 
@@ -54,7 +63,7 @@ def sync_detailed(
     json_body: KeylistQueryFilterRequest,
     paginate_limit: Union[Unset, int] = -1,
     paginate_offset: Union[Unset, int] = 0,
-) -> Response[Any]:
+) -> Response[KeylistQuery]:
     kwargs = _get_kwargs(
         client=client,
         mediation_id=mediation_id,
@@ -70,6 +79,25 @@ def sync_detailed(
     return _build_response(response=response)
 
 
+def sync(
+    *,
+    client: Client,
+    mediation_id: str,
+    json_body: KeylistQueryFilterRequest,
+    paginate_limit: Union[Unset, int] = -1,
+    paginate_offset: Union[Unset, int] = 0,
+) -> Optional[KeylistQuery]:
+    """ """
+
+    return sync_detailed(
+        client=client,
+        mediation_id=mediation_id,
+        json_body=json_body,
+        paginate_limit=paginate_limit,
+        paginate_offset=paginate_offset,
+    ).parsed
+
+
 async def asyncio_detailed(
     *,
     client: Client,
@@ -77,7 +105,7 @@ async def asyncio_detailed(
     json_body: KeylistQueryFilterRequest,
     paginate_limit: Union[Unset, int] = -1,
     paginate_offset: Union[Unset, int] = 0,
-) -> Response[Any]:
+) -> Response[KeylistQuery]:
     kwargs = _get_kwargs(
         client=client,
         mediation_id=mediation_id,
@@ -90,3 +118,24 @@ async def asyncio_detailed(
         response = await _client.post(**kwargs)
 
     return _build_response(response=response)
+
+
+async def asyncio(
+    *,
+    client: Client,
+    mediation_id: str,
+    json_body: KeylistQueryFilterRequest,
+    paginate_limit: Union[Unset, int] = -1,
+    paginate_offset: Union[Unset, int] = 0,
+) -> Optional[KeylistQuery]:
+    """ """
+
+    return (
+        await asyncio_detailed(
+            client=client,
+            mediation_id=mediation_id,
+            json_body=json_body,
+            paginate_limit=paginate_limit,
+            paginate_offset=paginate_offset,
+        )
+    ).parsed

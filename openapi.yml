@@ -3152,7 +3152,7 @@ components:
           type: object
           description: Detached Java Web Signature
           allOf:
-          - $ref: '#/definitions/AttachDecoratorDataJWS'
+          - $ref: '#/components/schemas/AttachDecoratorDataJWS'
         links:
           type: array
           description: List of hypertext links to data
@@ -3778,7 +3778,7 @@ components:
           type: object
           description: As signed attachment, DID Doc associated with DID
           allOf:
-          - $ref: '#/definitions/AttachDecorator'
+          - $ref: '#/components/schemas/AttachDecorator'
         label:
           type: string
           description: Label for DID exchange request
@@ -3823,7 +3823,7 @@ components:
           type: object
           description: Credential info
           allOf:
-          - $ref: '#/definitions/IndyCredInfo'
+          - $ref: '#/components/schemas/IndyCredInfo'
         cred_rev:
           pattern: ^[1-9][0-9]*$
           type: string
@@ -3833,7 +3833,7 @@ components:
           type: object
           description: Non-revocation interval from presentation request
           allOf:
-          - $ref: '#/definitions/IndyProofReqNonRevoked'
+          - $ref: '#/components/schemas/IndyProofReqNonRevoked'
         presentation_referents:
           type: array
           items:
@@ -4177,7 +4177,7 @@ components:
           type: object
           description: Pagination info
           allOf:
-          - $ref: '#/definitions/KeylistQueryPaginate'
+          - $ref: '#/components/schemas/KeylistQueryPaginate'
     KeylistQueryFilterRequest:
       type: object
       properties:
@@ -4814,7 +4814,7 @@ components:
           type: object
           description: Menu to send to connection
           allOf:
-          - $ref: '#/definitions/MenuJson'
+          - $ref: '#/components/schemas/MenuJson'
     SendMessage:
       type: object
       properties:
@@ -5469,7 +5469,7 @@ components:
           type: object
           description: Credential specification criteria by format
           allOf:
-          - $ref: '#/definitions/V20CredFilter'
+          - $ref: '#/components/schemas/V20CredFilter'
         trace:
           type: boolean
           description: Whether to trace event (default false)
@@ -5617,7 +5617,7 @@ components:
           type: object
           description: Credential exchange record
           allOf:
-          - $ref: '#/definitions/V20CredExRecord'
+          - $ref: '#/components/schemas/V20CredExRecord'
         dif:
           $ref: '#/components/schemas/V20CredExRecordDIF'
         indy:
@@ -5676,12 +5676,12 @@ components:
           type: object
           description: Credential filter for DIF
           allOf:
-          - $ref: '#/definitions/V20CredFilterDIF'
+          - $ref: '#/components/schemas/V20CredFilterDIF'
         indy:
           type: object
           description: Credential filter for indy
           allOf:
-          - $ref: '#/definitions/V20CredFilterIndy'
+          - $ref: '#/components/schemas/V20CredFilterIndy'
     V20CredFilterDIF:
       type: object
       properties:
@@ -5764,7 +5764,7 @@ components:
           type: object
           description: Credential specification criteria by format
           allOf:
-          - $ref: '#/definitions/V20CredFilter'
+          - $ref: '#/components/schemas/V20CredFilter'
         trace:
           type: boolean
           description: Whether to trace event (default false)
@@ -5808,7 +5808,7 @@ components:
           type: object
           description: Credential specification criteria by format
           allOf:
-          - $ref: '#/definitions/V20CredFilter'
+          - $ref: '#/components/schemas/V20CredFilter'
         trace:
           type: boolean
           description: Whether to trace event (default false)
@@ -5838,7 +5838,7 @@ components:
           type: object
           description: Credential specification criteria by format
           allOf:
-          - $ref: '#/definitions/V20CredFilter'
+          - $ref: '#/components/schemas/V20CredFilter'
         trace:
           type: boolean
           description: Whether to trace event (default false)

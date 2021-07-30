@@ -1,10 +1,11 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ...client import Client
 from ...models.get_records_role import GetRecordsRole
 from ...models.get_records_state import GetRecordsState
+from ...models.v20_cred_ex_record_list_result import V20CredExRecordListResult
 from ...types import UNSET, Response, Unset
 
 
@@ -46,12 +47,20 @@ def _get_kwargs(
     }
 
 
-def _build_response(*, response: httpx.Response) -> Response[Any]:
+def _parse_response(*, response: httpx.Response) -> Optional[V20CredExRecordListResult]:
+    if response.status_code == 200:
+        response_200 = V20CredExRecordListResult.from_dict(response.json())
+
+        return response_200
+    return None
+
+
+def _build_response(*, response: httpx.Response) -> Response[V20CredExRecordListResult]:
     return Response(
         status_code=response.status_code,
         content=response.content,
         headers=response.headers,
-        parsed=None,
+        parsed=_parse_response(response=response),
     )
 
 
@@ -62,7 +71,7 @@ def sync_detailed(
     role: Union[Unset, GetRecordsRole] = UNSET,
     state: Union[Unset, GetRecordsState] = UNSET,
     thread_id: Union[Unset, str] = UNSET,
-) -> Response[Any]:
+) -> Response[V20CredExRecordListResult]:
     kwargs = _get_kwargs(
         client=client,
         connection_id=connection_id,
@@ -78,6 +87,25 @@ def sync_detailed(
     return _build_response(response=response)
 
 
+def sync(
+    *,
+    client: Client,
+    connection_id: Union[Unset, str] = UNSET,
+    role: Union[Unset, GetRecordsRole] = UNSET,
+    state: Union[Unset, GetRecordsState] = UNSET,
+    thread_id: Union[Unset, str] = UNSET,
+) -> Optional[V20CredExRecordListResult]:
+    """ """
+
+    return sync_detailed(
+        client=client,
+        connection_id=connection_id,
+        role=role,
+        state=state,
+        thread_id=thread_id,
+    ).parsed
+
+
 async def asyncio_detailed(
     *,
     client: Client,
@@ -85,7 +113,7 @@ async def asyncio_detailed(
     role: Union[Unset, GetRecordsRole] = UNSET,
     state: Union[Unset, GetRecordsState] = UNSET,
     thread_id: Union[Unset, str] = UNSET,
-) -> Response[Any]:
+) -> Response[V20CredExRecordListResult]:
     kwargs = _get_kwargs(
         client=client,
         connection_id=connection_id,
@@ -98,3 +126,24 @@ async def asyncio_detailed(
         response = await _client.get(**kwargs)
 
     return _build_response(response=response)
+
+
+async def asyncio(
+    *,
+    client: Client,
+    connection_id: Union[Unset, str] = UNSET,
+    role: Union[Unset, GetRecordsRole] = UNSET,
+    state: Union[Unset, GetRecordsState] = UNSET,
+    thread_id: Union[Unset, str] = UNSET,
+) -> Optional[V20CredExRecordListResult]:
+    """ """
+
+    return (
+        await asyncio_detailed(
+            client=client,
+            connection_id=connection_id,
+            role=role,
+            state=state,
+            thread_id=thread_id,
+        )
+    ).parsed
