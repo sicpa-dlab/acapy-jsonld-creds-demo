@@ -1,34 +1,27 @@
 """Run the demo."""
 
+from datetime import date
 import json
 import os
 import time
-from typing import cast
 
 from acapy_client import Client
 from acapy_client.api.connection import create_invitation, receive_invitation
-from acapy_client.api.credential_definition import publish_cred_def
-from acapy_client.api.issue_credential_v_10 import issue_credential_automated
-from acapy_client.api.ledger import accept_taa, fetch_taa
-from acapy_client.api.present_proof import get_present_proof_records, send_proof_request
-from acapy_client.api.schema import publish_schema
-from acapy_client.api.wallet import create_did, set_public_did
+from acapy_client.api.credentials import post_credentials_w3c
+from acapy_client.api.issue_credential_v20 import (
+    issue_credential_automated as issue_credential_v20_automated,
+)
+from acapy_client.api.wallet import create_did
 from acapy_client.models import (
     CreateInvitationRequest,
-    CredAttrSpec,
-    CredentialDefinitionSendRequest,
-    CredentialPreview,
-    IndyProofRequest,
-    IndyProofRequestRequestedAttributes,
-    IndyProofRequestRequestedPredicates,
     ReceiveInvitationRequest,
-    SchemaSendRequest,
-    TAAAccept,
-    V10CredentialExchange,
-    V10CredentialProposalRequestMand,
-    V10PresentationSendRequestRequest,
+    V20CredSendRequest,
 )
-import httpx
+from acapy_client.models.did_create import DIDCreate
+from acapy_client.models.did_create_method import DIDCreateMethod
+from acapy_client.models.ld_proof_vc_detail import LDProofVCDetail
+from acapy_client.models.v20_cred_filter import V20CredFilter
+from acapy_client.models.w3c_credentials_list_request import W3CCredentialsListRequest
 
 
 HOLDER_URL = os.environ.get("HOLDER", "http://localhost:3001")
@@ -40,10 +33,11 @@ def describe(description: str, api):
         print(description)
         request = api._get_kwargs(**kwargs)
         print("Request:", json.dumps(request, indent=2))
-        result = api.sync(**kwargs)
-        assert result
-        print("Response:", json.dumps(result.to_dict(), indent=2))
-        return result
+        result = api.sync_detailed(**kwargs)
+        if not result.parsed:
+            raise Exception("Request failed: {}".format(repr(result)))
+        print("Response:", json.dumps(result.parsed.to_dict(), indent=2))
+        return result.parsed
 
     return _describe
 
@@ -66,100 +60,56 @@ def main():
     )
     # }}}
 
-    # Prepare for writing to ledger {{{
+    # Prepare signing DID {{{
     did_info = describe(
         "Create new DID for publishing to ledger in issuer", create_did
-    )(client=issuer).result
-
-    print("Publishing DID through https://selfserve.indiciotech.io")
-    response = httpx.post(
-        url="https://selfserve.indiciotech.io/nym",
-        json={
-            "network": "testnet",
-            "did": did_info.did,
-            "verkey": did_info.verkey,
-        },
-    )
-    if response.is_error:
-        print("Failed to publish DID:", response.text)
-        return
-    print("DID Published")
-
-    result = describe(
-        "Retrieve Transaction Author Agreement from the ledger", fetch_taa
-    )(client=issuer).result
-
-    result = describe("Sign transaction author agreement", accept_taa)(
-        client=issuer,
-        json_body=TAAAccept(
-            mechanism="on_file",
-            text=result.taa_record.text,
-            version=result.taa_record.version,
-        ),
-    )
-
-    result = describe("Set DID as public DID for issuer", set_public_did)(
-        client=issuer, did=did_info.did
-    ).result
+    )(client=issuer, json_body=DIDCreate(method=DIDCreateMethod.KEY)).result
     # }}}
 
-    # Prepare Credential ledger artifacts {{{
-    result = describe("Publish schema to the ledger", publish_schema)(
-        client=issuer,
-        json_body=SchemaSendRequest(
-            attributes=["firstname", "age"],
-            schema_name="jsonld_testing",
-            schema_version="0.1.0",
-        ),
-    )
-
-    issuer.timeout = 30
-    result = describe("Publish credential definition", publish_cred_def)(
-        client=issuer,
-        json_body=CredentialDefinitionSendRequest(
-            schema_id=result.schema_id,
-        ),
-    )
-    issuer.timeout = 5
-    # }}}
-
-    # Issue Credential and request presentation {{{
-    issue_result = describe("Issue credential to holder", issue_credential_automated)(
-        client=issuer,
-        json_body=V10CredentialProposalRequestMand(
-            connection_id=issuer_conn_record.connection_id,
-            credential_proposal=CredentialPreview(
-                attributes=[
-                    CredAttrSpec(name="firstname", value="Bob"),
-                    CredAttrSpec(name="age", value="42"),
-                ]
-            ),
-            cred_def_id=result.credential_definition_id,
-        ),
-    )
-    issue_result = cast(V10CredentialExchange, issue_result)
+    print("Pausing to allow connection to finish...")
     time.sleep(1)
-    result = describe("Request proof from holder", send_proof_request)(
+
+    # Issue Credential v2 {{{
+    describe("Issue Credential v2 to holder", issue_credential_v20_automated)(
         client=issuer,
-        json_body=V10PresentationSendRequestRequest(
+        json_body=V20CredSendRequest(
             connection_id=issuer_conn_record.connection_id,
-            proof_request=IndyProofRequest(
-                name="proof of name",
-                version="0.1.0",
-                requested_attributes=IndyProofRequestRequestedAttributes.from_dict(
+            auto_remove=False,
+            comment="nothing",
+            filter_=V20CredFilter(
+                ld_proof=LDProofVCDetail.from_dict(
                     {
-                        "firstname": {
-                            "name": "firstname",
-                        }
+                        "credential": {
+                            "@context": [
+                                "https://www.w3.org/2018/credentials/v1",
+                                "https://www.w3.org/2018/credentials/examples/v1",
+                            ],
+                            "type": [
+                                "VerifiableCredential",
+                                "UniversityDegreeCredential",
+                            ],
+                            "issuer": did_info.did,
+                            "issuanceDate": str(date.today()),
+                            "credentialSubject": {
+                                "degree": {
+                                    "type": "BachelorDegree",
+                                    "name": "Bachelor of Science and Arts",
+                                }
+                            },
+                        },
+                        "options": {"proofType": "Ed25519Signature2018"},
                     }
-                ),
-                requested_predicates=IndyProofRequestRequestedPredicates(),
+                )
             ),
         ),
     )
-    time.sleep(1)
-    result = describe("List presentations", get_present_proof_records)(client=issuer)
     # }}}
+
+    print("Pausing to allow credential exchange to occur...")
+    time.sleep(2)
+    describe("Holder retrieve credentials", post_credentials_w3c)(
+        client=holder, json_body=W3CCredentialsListRequest()
+    )
 
 
 if __name__ == "__main__":

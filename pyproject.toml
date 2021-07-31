@@ -7,8 +7,8 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.6.9"
-acapy-client = { path = "acapy-client", develop = true }
 PyYAML = "^5.4.1"
+acapy-client = {git = "https://github.com/indicio-tech/acapy-client", rev = "36dfddc8b38e9d5edb86ee0a8a46d1a1bb92b95f"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.5b1"
