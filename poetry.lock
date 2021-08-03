@@ -15,8 +15,8 @@ python-dateutil = "^2.8.0"
 [package.source]
 type = "git"
 url = "https://github.com/indicio-tech/acapy-client"
-reference = "36dfddc8b38e9d5edb86ee0a8a46d1a1bb92b95f"
-resolved_reference = "36dfddc8b38e9d5edb86ee0a8a46d1a1bb92b95f"
+reference = "d92ef607ba2ff1152ec15429f2edb20976991424"
+resolved_reference = "d92ef607ba2ff1152ec15429f2edb20976991424"
 
 [[package]]
 name = "anyio"
@@ -503,7 +503,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6.9"
-content-hash = "132a7c86f442698481000c302fb387447d98a839ec9051d25b60e40d38ee8a81"
+content-hash = "b1e646eccaaba0b8f79e766f0a817f5b8dc8ec8c983cf296579b97fff93fbf5e"
 
 [metadata.files]
 acapy-client = []

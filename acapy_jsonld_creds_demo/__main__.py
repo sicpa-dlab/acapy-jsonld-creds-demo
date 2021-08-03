@@ -4,24 +4,34 @@ from datetime import date
 import json
 import os
 import time
+import uuid
 
 from acapy_client import Client
 from acapy_client.api.connection import create_invitation, receive_invitation
-from acapy_client.api.credentials import post_credentials_w3c
+from acapy_client.api.credentials import get_w3c_credentials
 from acapy_client.api.issue_credential_v20 import (
     issue_credential_automated as issue_credential_v20_automated,
+)
+from acapy_client.api.present_proof_v20 import (
+    send_request_free as send_proof_request,
+    get_records as get_proof_records,
 )
 from acapy_client.api.wallet import create_did
 from acapy_client.models import (
     CreateInvitationRequest,
     ReceiveInvitationRequest,
     V20CredSendRequest,
+    DIDCreate,
+    DIDCreateMethod,
+    LDProofVCDetail,
+    V20CredFilter,
+    W3CCredentialsListRequest,
+    V20PresSendRequestRequest,
 )
-from acapy_client.models.did_create import DIDCreate
-from acapy_client.models.did_create_method import DIDCreateMethod
-from acapy_client.models.ld_proof_vc_detail import LDProofVCDetail
-from acapy_client.models.v20_cred_filter import V20CredFilter
-from acapy_client.models.w3c_credentials_list_request import W3CCredentialsListRequest
+from acapy_client.models.dif_options import DIFOptions
+from acapy_client.models.dif_proof_request import DIFProofRequest
+from acapy_client.models.presentation_definition import PresentationDefinition
+from acapy_client.models.v20_pres_request_by_format import V20PresRequestByFormat
 
 
 HOLDER_URL = os.environ.get("HOLDER", "http://localhost:3001")
@@ -61,9 +71,9 @@ def main():
     # }}}
 
     # Prepare signing DID {{{
-    did_info = describe(
-        "Create new DID for publishing to ledger in issuer", create_did
-    )(client=issuer, json_body=DIDCreate(method=DIDCreateMethod.KEY)).result
+    did_info = describe("Create new DID for issuing", create_did)(
+        client=issuer, json_body=DIDCreate(method=DIDCreateMethod.KEY)
+    ).result
     # }}}
 
     print("Pausing to allow connection to finish...")
@@ -107,9 +117,58 @@ def main():
 
     print("Pausing to allow credential exchange to occur...")
     time.sleep(2)
-    describe("Holder retrieve credentials", post_credentials_w3c)(
+    describe("Holder retrieve and display JSON-LD credentials", get_w3c_credentials)(
         client=holder, json_body=W3CCredentialsListRequest()
     )
+
+    # Request Proof v2 {{{
+    describe("Request proof v2 from holder", send_proof_request)(
+        client=issuer,
+        json_body=V20PresSendRequestRequest(
+            connection_id=issuer_conn_record.connection_id,
+            presentation_request=V20PresRequestByFormat(
+                dif=DIFProofRequest(
+                    presentation_definition=PresentationDefinition.from_dict(
+                        {
+                            "id": "32f54163-7166-48f1-93d8-ff217bdb0654",
+                            "format": {
+                                "ldp_vp": {"proof_type": ["Ed25519Signature2018"]}
+                            },
+                            "input_descriptors": [
+                                {
+                                    "id": "degree_input_1",
+                                    "name": "Degree",
+                                    "schema": [
+                                        {
+                                            "uri": "https://www.w3.org/2018/credentials#VerifiableCredential"  # noqa: E501
+                                        },
+                                        {
+                                            "uri": "https://www.w3.org/2018/credentials/examples/v1#UniversityDegreeCredential",  # noqa: E501
+                                        },
+                                    ],
+                                    "constraints": {
+                                        "fields": [
+                                            {
+                                                "path": ["$.issuer"],
+                                                "filter": {"const": did_info.did},
+                                            },
+                                        ],
+                                    },
+                                }
+                            ],
+                        }
+                    ),
+                    options=DIFOptions(
+                        challenge=str(uuid.uuid4()), domain="test-degree"
+                    ),
+                )
+            ),
+        ),
+    )
+    print("Pausing to allow presentation exchange to occur...")
+    time.sleep(2)
+    describe("List presentations on verifier", get_proof_records)(client=issuer)
+    # }}}
 
 
 if __name__ == "__main__":

@@ -22,8 +22,8 @@ auto-respond-credential-request: true
 auto-respond-presentation-proposal: true
 auto-respond-presentation-request: true
 auto-verify-presentation: true
-wallet-type: indy
-wallet-name: default
-wallet-key: insecure
-auto-provision: true
+# wallet-type: indy
+# wallet-name: default
+# wallet-key: insecure
+# auto-provision: true
 log-level: debug

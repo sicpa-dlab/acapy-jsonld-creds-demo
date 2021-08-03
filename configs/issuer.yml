@@ -6,7 +6,8 @@ endpoint:
     - http://localhost:3000
 # Ledger
 # Use Indicio TestNet. Become an endorser at https://selfserve.indiciotech.io/.
-genesis-url: https://raw.githubusercontent.com/Indicio-tech/indicio-network/master/genesis_files/pool_transactions_testnet_genesis
+#genesis-url: https://raw.githubusercontent.com/Indicio-tech/indicio-network/master/genesis_files/pool_transactions_testnet_genesis
+no-ledger: true
 
 admin: [0.0.0.0, 3001]
 admin-insecure-mode: true
@@ -22,8 +23,8 @@ auto-respond-credential-request: true
 auto-respond-presentation-proposal: true
 auto-respond-presentation-request: true
 auto-verify-presentation: true
-wallet-type: indy
-wallet-name: default
-wallet-key: insecure
-auto-provision: true
+# wallet-type: indy
+# wallet-name: default
+# wallet-key: insecure
+# auto-provision: true
 log-level: debug
